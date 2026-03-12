@@ -1,1 +1,9 @@
-# WeCode
+ai-study-planner
+│
+├── server.js
+├── package.json
+│
+├── public
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
