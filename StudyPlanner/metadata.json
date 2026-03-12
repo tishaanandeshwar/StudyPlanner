@@ -1,7 +1,0 @@
-{
-  "name": "FocusFlow - AI Study Planner",
-  "description": "A modern AI-powered study planner and productivity coach to help students manage time, generate study schedules, and track progress.",
-  "requestFramePermissions": [
-    "geolocation"
-  ]
-}
