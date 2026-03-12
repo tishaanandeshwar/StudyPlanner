@@ -1,9 +1,21 @@
-ai-study-planner
-│
-├── server.js
-├── package.json
-│
-├── public
+ai-study-planner/
+├── backend/
+│   ├── app.py
+│   ├── models.py
+│   ├── requirements.txt
+│   ├── config.py
+│   └── database/
+│       └── study_planner.db
+├── frontend/
 │   ├── index.html
-│   ├── style.css
-│   └── script.js
+│   ├── dashboard.html
+│   ├── tasks.html
+│   ├── analytics.html
+│   ├── css/
+│   │   ├── style.css
+│   │   └── dashboard.css
+│   └── js/
+│       ├── api.js
+│       ├── dashboard.js
+│       └── tasks.js
+└── README.md
