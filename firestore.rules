@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: tasks
+    // Fields:
+    //   - userId: string (required)
+    //   - title: string (required, 1-100 chars)
+    //   - deadline: string (optional)
+    //   - priority: string (required, low/medium/high)
+    //   - status: string (required, pending/completed)
+    //   - category: string (optional)
+    //   - createdAt: string (required, ISO8601)
+    //
+    // Collection: sessions
+    // Fields:
+    //   - userId: string (required)
+    //   - taskId: string (optional)
+    //   - durationMinutes: number (required, positive)
+    //   - focusScore: number (required, 0-100)
+    //   - completedAt: string (required, ISO8601)
+    //
+    // ===============================================================
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidTask(data) {
+      return data.keys().hasAll(['userId', 'title', 'status', 'createdAt']) &&
+             data.userId == request.auth.uid &&
+             data.title is string && data.title.size() > 0 && data.title.size() <= 100 &&
+             data.status in ['pending', 'completed'] &&
+             data.priority in ['low', 'medium', 'high'];
+    }
+
+    function isValidSession(data) {
+      return data.keys().hasAll(['userId', 'durationMinutes', 'focusScore', 'completedAt']) &&
+             data.userId == request.auth.uid &&
+             data.durationMinutes is number && data.durationMinutes > 0 &&
+             data.focusScore is number && data.focusScore >= 0 && data.focusScore <= 100;
+    }
+
+    match /tasks/{taskId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && isValidTask(request.resource.data);
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid && isValidTask(request.resource.data);
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    match /sessions/{sessionId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && isValidSession(request.resource.data);
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid && isValidSession(request.resource.data);
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+  }
+}

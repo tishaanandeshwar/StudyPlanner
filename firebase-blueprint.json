@@ -1,0 +1,42 @@
+{
+  "entities": {
+    "Task": {
+      "title": "Task",
+      "description": "A study task created by the user",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the user who owns this task" },
+        "title": { "type": "string", "description": "The title of the task" },
+        "deadline": { "type": "string", "description": "The deadline date string" },
+        "priority": { "type": "string", "enum": ["low", "medium", "high"] },
+        "status": { "type": "string", "enum": ["pending", "completed"] },
+        "category": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "status", "createdAt"]
+    },
+    "StudySession": {
+      "title": "StudySession",
+      "description": "A recorded study session",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "taskId": { "type": "string" },
+        "durationMinutes": { "type": "number" },
+        "focusScore": { "type": "number" },
+        "completedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "durationMinutes", "focusScore", "completedAt"]
+    }
+  },
+  "firestore": {
+    "/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "Collection of study tasks"
+    },
+    "/sessions/{sessionId}": {
+      "schema": "StudySession",
+      "description": "Collection of study sessions"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "EduCoach AI",
+  "description": "An AI-powered study planner and productivity coach that helps students manage time, track progress, and stay focused.",
+  "requestFramePermissions": [
+    "notifications"
+  ]
+}
